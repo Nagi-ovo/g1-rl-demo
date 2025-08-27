@@ -1,0 +1,31 @@
+[project]
+name = "g1-rl-demo"
+version = "0.1.0"
+requires-python = "==3.8.20"
+dependencies = [
+    "numpy==1.20",
+    "tensorboard>=2.14.0",
+    "torch==2.3.1",
+    "torchaudio==2.3.1",
+    "torchvision==0.18.1",
+    "isaacgym",
+    "rsl_rl",
+    "unitree_rl_gym",
+    "unitree-sdk2py",
+]
+
+[tool.uv.sources]
+isaacgym = { path = "third_party/isaacgym/python", editable = true }
+rsl_rl = { path = "third_party/rsl_rl", editable = true }
+unitree_rl_gym = { path = "third_party/unitree_rl_gym", editable = true }
+unitree-sdk2py = { path = "third_party/unitree_sdk2_python", editable = true }
+
+[[tool.uv.index]]
+name = "tsinghua"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
+
+[tool.uv]
+# 下载 Python 的镜像
+# python-install-mirror = "https://github.com/astral-sh/python-build-standalone/releases/download" # 官方的默认镜像，直接从 github 安装，需要连接外网，官方默认配置
+# python-install-mirror = "https://python-standalone.org/mirror/astral-sh/python-build-standalone/"
