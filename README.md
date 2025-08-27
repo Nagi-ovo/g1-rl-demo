@@ -1,68 +1,87 @@
-## Intro
-This is a base repository for running the [Unitree G1 Robotic's Reinforcement Learning Demo](https://support.unitree.com/home/en/G1_developer/rl_control_routine) and the [Unitree RL Gym project](https://github.com/unitreerobotics/unitree_rl_gym#).
+# G1 Reinforcement Learning Demo
 
-You can also use it for any further third party development.
+This repository provides a clean, reproducible, and easy-to-use starter environment for running the **[Unitree G1 Robotic's Reinforcement Learning Demo](https://support.unitree.com/home/en/G1_developer/rl_control_routine)** and the **[Unitree RL Gym project](https://github.com/unitreerobotics/unitree_rl_gym#)**.
 
-## Setups
-### Clone the project
+The primary goal is to simplify the setup process using the high-performance package manager **[uv](https://docs.astral.sh/uv/)**, allowing you to get the simulation running with minimal operations.
+
+> [!NOTE]
+> An NVIDIA graphics card with current drivers is required for Isaac Gym.
+
+## Setup Instructions
+
+### 1. Clone the Repository
+
+Clone this repository along with its required submodules. Then, check out the specific version of `rsl_rl` needed for compatibility.
 
 ```bash
+# Clone the repository and submodules
 git clone --recurse-submodules https://github.com/Nagi-ovo/g1-rl-demo.git
-```
+cd g1-rl-demo
 
-You should also switch the `rsl_rl` library to `v1.0.2` branch:
-
-```bash
-cd third_party/rsl_rl
+# Checkout the correct rsl_rl version
+pushd third_party/rsl_rl
 git checkout v1.0.2
+popd
 ```
 
-### Download uv
+### 2. Install Dependencies
 
-Download `uv` by running:
+#### Install uv
+We use `uv` for fast and deterministic dependency management.
+
 ```bash
 wget -qO- https://astral.sh/uv/install.sh | sh
 ```
 
-You can check for more information on [uv's offisional document website](https://docs.astral.sh/uv/getting-started/installation/#installation-methods).
+#### Download Isaac Gym
+Download **Isaac Gym Preview 4** from the [NVIDIA Developer website](https://developer.nvidia.com/isaac-gym/download).
 
-### Download Isaac Gym
+Extract the archive and move the **entire `isaacgym` folder** into the `third_party/` directory of this project.
 
-Download the folder from [https://developer.nvidia.com/isaac-gym/download](https://developer.nvidia.com/isaac-gym/download) and put it into the `third_party` folder.
+### 3. Install the Python Environment
 
-### Sync the project
-
-You can set up the entire environment by running:
+This single command will create a virtual environment (`.venv`) and install all project dependencies specified in `pyproject.toml`.
 
 ```bash
 uv sync
 ```
 
-You can test if the Isaac Gym Library is properly installed by running:
+### 4. (Optional) Verify Isaac Gym Installation
+
+You can confirm that Isaac Gym is installed correctly by running one of its examples.
 
 ```bash
-cd third_party/isaacgym/python/examples
+pushd third_party/isaacgym/python/examples
 uv run 1080_balls_of_solitude.py
+popd
 ```
 
-### Play the pre-trained policy model
+## Running the Pre-trained Demo
 
-Adjust the model directory in `third_party/unitree_rl_gym/deploy/deploy_mujoco/configs/g1.yaml`
+### 1. Place the Policy Model
 
-```python
+This project includes a pre-trained policy model (`policy_lstm_1.pt`). Move it to the correct directory for the simulation to find it.
+
+```bash
+mv policy_lstm_1.pt third_party/unitree_rl_gym/logs/g1/exported/policies/
+```
+
+### 2. Configure the Policy Path
+
+Edit the configuration file at `third_party/unitree_rl_gym/deploy/deploy_mujoco/configs/g1.yaml` to point to the correct policy file.
+
+```yaml
+# Change this:
 # policy_path: "{LEGGED_GYM_ROOT_DIR}/deploy/pre_train/g1/motion.pt"
+
+# To this:
 policy_path: "{LEGGED_GYM_ROOT_DIR}/logs/g1/exported/policies/policy_lstm_1.pt"
 ```
 
-Move the `policy_lstm_1.py` file to it's propossed place:
+### 3. Run the Simulation
+
+Launch the simulation using the pre-trained policy.
 
 ```bash
-mv policy_lstm_1.py third_party/unitree_rl_gym/legged_gym/logs/g1/exported/policies/policy_lstm_1.py
-```
-
-
-Play the policy:
-
-```bash
-uv run  third_party/unitree_rl_gym/legged_gym/scripts/play.py --task=g1
+uv run third_party/unitree_rl_gym/legged_gym/scripts/play.py --task=g1
 ```
