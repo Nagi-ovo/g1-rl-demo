@@ -6,6 +6,7 @@ The primary goal is to simplify the setup process using the high-performance pac
 
 > [!NOTE]
 > An NVIDIA graphics card with current drivers is required for Isaac Gym.
+> Isaac Sim's pip installation typically requires GLIBC 2.35+, which may not work on Ubuntu 20.04
 
 ## Setup Instructions
 
